@@ -42,4 +42,20 @@ func TestInsert(t *testing.T) {
 			t.Errorf("Expecting error, got no eror")
 		}
 	})
+
+	//subtest for product is empty
+	t.Run("id is empty", func(t *testing.T) {
+		repo.Mock.On("Add", models.Product{
+			ID:    "",
+			Name:  "Windows",
+			Price: 52000,
+			Stock: 32,
+		}).Return(errors.New("Product id cannot be empty")).Once()
+
+		err := service.Insert("", "Windows", 52000, 32)
+
+		if err == nil {
+			t.Errorf("Id empty error")
+		}
+	})
 }
